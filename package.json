@@ -16,9 +16,9 @@
   ],
   "scripts": {
     "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
-    "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/my-component.umd.js",
-    "build:es": "rollup --config build/rollup.config.js --format es --file dist/my-component.esm.js",
-    "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/my-component.min.js",
+    "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/vuetify-video-parallax.umd.js",
+    "build:es": "rollup --config build/rollup.config.js --format es --file dist/vuetify-video-parallax.esm.js",
+    "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/vuetify-video-parallax.min.js",
     "serve": "vue serve --open src/App.vue"
   },
   "dependencies": {
