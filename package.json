@@ -1,0 +1,45 @@
+{
+  "name": "vuetify-video-parallax",
+  "description": "a Vuetify Parallax Component for Videos",
+  "version": "1.0.0",
+  "author": "Charl Joseph Mert",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/vuetify-video-parallax.umd.js",
+  "module": "dist/vuetify-video-parallax.esm.js",
+  "unpkg": "dist/vuetify-video-parallax.min.js",
+  "browser": {
+    "./sfc": "src/VuetifyVideoParallax.vue"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
+    "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/my-component.umd.js",
+    "build:es": "rollup --config build/rollup.config.js --format es --file dist/my-component.esm.js",
+    "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/my-component.min.js",
+    "serve": "vue serve --open src/App.vue"
+  },
+  "dependencies": {
+    "vue": "^2.5.17",
+    "vuetify": "^1.2.9",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "devDependencies": {
+    "@mdi/font": "^2.5.94",
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-plugin-eslint": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "@vue/eslint-config-standard": "^3.0.1",
+    "material-design-icons-iconfont": "^3.0.3",
+    "rollup": "^1.20.3",
+    "rollup-plugin-buble": "^0.19.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-vue": "^5.0.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue": "^2.5.17",
+    "vue-template-compiler": "^2.5.17"
+  }
+}
