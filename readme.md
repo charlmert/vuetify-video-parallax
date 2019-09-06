@@ -1,18 +1,47 @@
 # Vuetify Video Parallax
 
+This vue component is based on https://vuetifyjs.com/ v-parallax component with
+support for displaying looped stock videos in the background.
+
+While the stock video is loading an alternate image can be specified that will
+behave like the vuetify image parallax does until the video has been downloaded.
+
+It does not need vuetify to run so it will work in your non vuetify environment.
+
 ## Howto Install
 
 ```bash
 npm install vuetify-video-parallax --save
 ```
 
-## Howto use
+## First get some videos
 
 Grab some videos for free from:
 - https://pixabay.com/videos/search/
 - https://www.videvo.net/free-stock-footage/
 - https://www.pexels.com/videos/
 
+Copy the video to your assets folder
+
+## Howto use (vue plain html)
+
+The videos should be accessible if you create a public/assets folder in your
+project root (Vue will serve assets if you put them in a public/ folder).
+
+Add the cdn script import
+```html
+<script src="https://unpkg.com/vuetify-video-parallax"></script>
+```
+
+Use in the template section of your app as follows
+
+```html
+<v-video-parallax src="assets/city.mp4" img="assets/city.png" height="600">
+  Some Html Here
+</v-video-parallax>
+```
+
+## Howto use (vue development env)
 Use in your main App.vue component like so:
 
 Import the component
@@ -28,24 +57,10 @@ export default {
 }
 ```
 
-Copy the video to your assets folder
-
 Create a video parallax tag in your <template></template>
 
 ```html
-<VideoParallax height="600" src="/assets/thunda.mp4">
-          <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" alt="Vuetify" height="38">
-          <h1>Vuetify Video Parallax</h1>
-          <div class="subheading mb-4 text-center">Powered by Vuetify</div>
-          <v-btn
-            class="mt-12"
-            color="blue lighten-2"
-            dark
-            large
-            href="https://github.com/charlmert/vuetify-video-parallax"
-            style="margin-top: 30px"
-          >
-            Get Started
-          </v-btn>
+<VideoParallax height="600" img="assets/city.png" src="/assets/thunda.mp4">
+  Some Html Here
 </VideoParallax>
 ```
