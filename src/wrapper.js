@@ -5,7 +5,7 @@ import component from './VuetifyVideoParallax.vue';
 export function install(Vue) {
 	if (install.installed) return;
 	install.installed = true;
-	Vue.component('v-video-parallax', component);
+  Vue.component('v-video-parallax', component);
 }
 
 // Create module definition for Vue.use()
