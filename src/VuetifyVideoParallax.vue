@@ -2,7 +2,8 @@
 <div>
   <div class="v-parallax" :style="'height: ' + height + 'px;'">
     <div class="v-parallax__image-container">
-      <video ref="video" :loop="loop" :muted="muted" :autoplay="autoplay" :style="styles">
+      <img ref="image" :src="img" :style="imageStyles">
+      <video ref="video" :loop="loop" :muted="muted" :autoplay="autoplay" :style="videoStyles">
         <source :src="src">
       </video>
     </div>
@@ -14,10 +15,16 @@
 </template>
 
 <script>
+import { Loader, middleware } from 'resource-loader';
+
 export default {
   name: 'v-video-parallax',
   props: {
     src: String,
+    img: {
+      type: String,
+      default: ''
+    },
     height: String,
     width: {
       type: String,
@@ -34,6 +41,22 @@ export default {
     autoplay: {
       type: String,
       default: 'autoplay'
+    },
+    onProgress: {
+      type: Function,
+      default: null
+    },
+    onError: {
+      type: Function,
+      default: null
+    },
+    onLoad: {
+      type: Function,
+      default: null
+    },
+    onComplete: {
+      type: Function,
+      default: null
     }
   },
   data () {
@@ -45,7 +68,8 @@ export default {
       scrollTop: 0,
       windowHeight: 0,
       windowBottom: 0,
-      isBooted: true
+      isBooted: true,
+      videoReady: false,
     }
   },
   mounted: function() {
@@ -71,8 +95,21 @@ export default {
           _this.listeners()
         }, false)
       }
-    },
 
+      if (this.img != '') {
+        var image = this.$refs.image;
+        if (!image) return;
+        if (image.complete) {
+            this.translate()
+            this.listeners()
+        } else {
+          image.addEventListener('load', function () {
+            _this.translate()
+            _this.listeners()
+          }, false)
+        }
+      }
+    },
     calcDimensions: function calcDimensions() {
         var offset = this.$el.getBoundingClientRect();
         this.scrollTop = window.pageYOffset
@@ -100,34 +137,91 @@ export default {
         this.calcDimensions();
         this.percentScrolled = (this.windowBottom - this.elOffsetTop) / (parseInt(this.height) + this.windowHeight)
         this.parallax = Math.round(this.parallaxDist * this.percentScrolled)
+    },
+    _onComplete (after) {
+        this.$data.videoReady = true
+        after()
     }
   },
   computed: {
     imgHeight: function imgHeight() {
       return this.objHeight()
     },
-    styles: function styles() {
-      return {
-        opacity: this.isBooted ? 1 : 0,
-        width: this._width,
-        transform: 'translate(0, ' + this.parallax + 'px)'
+    videoStyles: function () {
+      if (!this.$data.videoReady) {
+        return {
+          visibility: 'hidden',
+          display: 'none',
+        }
+      } else {
+        return {
+          visibility: 'visible',
+          display: 'block',
+          opacity: this.isBooted ? 1 : 0,
+          width: this._width,
+          transform: 'translate(0, ' + this.parallax + 'px)'
+        }
+      }
+    },
+    imageStyles: function () {
+      if (!this.$data.videoReady) {
+        return {
+          visibility: 'visible',
+          display: 'block',
+          opacity: this.isBooted ? 1 : 0,
+          width: this._width,
+          transform: 'translate(0, ' + this.parallax + 'px)',
+        }
+      } else {
+        return {
+          visibility: 'hidden',
+          display: 'none',
+        }
       }
     },
     _width: function() {
       return this.width ?  this.width : '100%'
     }
-
   },
   watch: {
     parallax: function parallax() {
       this.isBooted = true
     }
   },
-
   beforeDestroy: function beforeDestroy() {
     window.removeEventListener('scroll', this.translate, false)
     window.removeEventListener('resize', this.translate, false)
   },
+  created: function() {
+    const loader = new Loader();
+    let options = {}
+    loader
+        .add(this.src, this.src, options)
+        .pre(middleware.caching)
+        .use(middleware.parsing)
+        .load((loader, resources) => {
+
+        });
+
+    if (typeof(this.onProgress) == 'function') {
+      loader.onProgress.add(this.onProgress);
+    }
+    if (typeof(this.onError) == 'function') {
+      loader.onError.add(this.onError);
+    }
+    if (typeof(this.onLoad) == 'function') {
+      loader.onLoad.add(this.onLoad);
+    }
+    if (typeof(this.onComplete) == 'function') {
+      loader.onComplete.add(() => {
+        this.onComplete(this._onComplete)
+      });
+    } else {
+      loader.onComplete.add(() => {
+        this.onComplete()
+      });
+    }
+  }
 }
 </script>
 
