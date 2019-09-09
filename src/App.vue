@@ -5,7 +5,7 @@
    </v-toolbar>
    <v-content>
      <section>
-       <v-video-parallax src="assets/teddy.mp4" height="600">
+       <v-video-parallax src="assets/ocean.mp4" img="assets/ocean.png" height="600">
          <v-layout
            column
            align-center
@@ -98,7 +98,7 @@
      </section>
 
      <section>
-       <v-video-parallax src="assets/engine.mp4" height="380">
+       <v-video-parallax src="assets/engine.mp4" img="assets/engine.png" height="380">
          <v-layout column align-center justify-center>
            <div class="headline white--text mb-4 text-center">Web development has never been easier</div>
            <em>Kick-start your application today</em>
@@ -185,9 +185,9 @@
      </section>
 
      <section>
-       <v-video-parallax src="assets/meeting.mp4" height="380">
+       <v-video-parallax src="assets/meeting.mp4" img="assets/meeting.png" height="380">
          <v-layout column align-center justify-center>
-           <div class="headline white--text mb-4 text-center">Web development has never been easier</div>
+           <div class="headline black--text mb-4 text-center">Web development has never been easier</div>
            <em>Kick-start your application today</em>
            <v-btn
              class="mt-12"
@@ -294,14 +294,43 @@ Vue.use(Vuetify, {
 import VuetifyVideoParallax from './VuetifyVideoParallax.vue'
 Vue.component('v-video-parallax', VuetifyVideoParallax)
 
+import VueLoading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css';
+Vue.use(VueLoading);
+Vue.component('loading', VueLoading)
+
 export default {
   name: 'App',
   el: '#app',
   vuetify: new Vuetify(),
   data () {
     return {
-      title: ''
+      title: '',
+      loader: null,
     }
+  },
+  mounted: function() {
+
+  },
+  created: function() {
+    let loader = Vue.$loading.show({
+      container: this.$refs.loadingContainer,
+      canCancel: true, // default false
+      //onCancel: this.yourMethodName,
+      color: '#ffffff',
+      loader: 'spinner',
+      width: 64,
+      height: 64,
+      backgroundColor: '#ffffff',
+      opacity: 0.5,
+      zIndex: 999,
+    })
+
+    let self = Object.assign(this, {})
+    window.addEventListener("load", function(event) {
+      console.log('document ready')
+      loader.hide();
+    });
   }
 }
 </script>
