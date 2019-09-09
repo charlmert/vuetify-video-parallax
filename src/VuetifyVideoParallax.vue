@@ -140,7 +140,9 @@ export default {
     },
     _onComplete (after) {
         this.$data.videoReady = true
-        after()
+        if (typeof(after) == 'function') {
+          after()
+        }
     }
   },
   computed: {
@@ -212,15 +214,9 @@ export default {
     if (typeof(this.onLoad) == 'function') {
       loader.onLoad.add(this.onLoad);
     }
-    if (typeof(this.onComplete) == 'function') {
-      loader.onComplete.add(() => {
-        this.onComplete(this._onComplete)
-      });
-    } else {
-      loader.onComplete.add(() => {
-        this.onComplete()
-      });
-    }
+    loader.onComplete.add(() => {
+      this._onComplete(this.onComplete)
+    });
   }
 }
 </script>
